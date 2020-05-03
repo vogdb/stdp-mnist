@@ -131,7 +131,6 @@ def connect_neurons(exc, inh, input, test_mode=False):
     if not test_mode:
         input_exc_stdp = STDP(
             input_exc, eqs=eqs_stdp_ee, pre=eqs_stdp_pre_ee, post=eqs_stdp_post_ee, wmin=0., wmax=wmax_ee)
-        normalize_weights(input_exc)
     return exc_inh, inh_exc, input_exc
 
 
@@ -179,6 +178,15 @@ def get_recognized_number_ranking(assignments, spike_rates):
     return np.argsort(summed_rates)[::-1]
 
 
+def save_weights(exc, input_exc):
+    print 'save connections'
+    np.save(os.path.join(WEIGHT_PATH, 'theta_A.npy'), exc.theta)
+    input_exc_weights = input_exc[:]
+    connListSparse = ([(i, j, input_exc_weights[i, j])
+                       for i in xrange(input_exc_weights.shape[0]) for j in xrange(input_exc_weights.shape[1])])
+    np.save(os.path.join(WEIGHT_PATH, 'XeAe.npy'), connListSparse)
+
+
 def run_simulation(test_mode=False):
     exc, inh, input = create_neurons(test_mode)
     exc_inh, inh_exc, input_exc = connect_neurons(exc, inh, input, test_mode)
@@ -203,6 +211,9 @@ def run_simulation(test_mode=False):
     print 'start %s' % 'testing' if test_mode else 'training'
     for j in tqdm(xrange(num_examples)):
         input.rate = data['x'][j % len(data['y']), :, :].reshape(n_input) / 8. * input_intensity
+        # weights of input_exc are np.allclose between runs. Why he put it here and not after creating connection?
+        if not test_mode:
+            normalize_weights(input_exc)
         run(single_example_time)
         if j % update_interval == 0 and j > 0:
             assignments = get_new_assignments(result_monitor[:], input_numbers[j - update_interval: j])
@@ -231,23 +242,8 @@ def run_simulation(test_mode=False):
             input_intensity = start_input_intensity
 
     if not test_mode:
-        print 'save connections'
-        np.save(os.path.join(WEIGHT_PATH, 'theta_A_result.npy'), exc.theta)
-        input_exc_weights = input_exc[:]
-        connListSparse = ([(i, j, input_exc_weights[i, j])
-                           for i in xrange(input_exc_weights.shape[0]) for j in xrange(input_exc_weights.shape[1])])
-        np.save(os.path.join(WEIGHT_PATH, 'XeAe_result.npy'), connListSparse)
-
-
-def compare_weights():
-    expectedTheta = np.load(os.path.join(WEIGHT_PATH, 'theta_A.npy'))
-    actualTheta = np.load(os.path.join(WEIGHT_PATH, 'theta_A_result.npy'))
-    print np.allclose(expectedTheta, actualTheta)
-    expectedXeAe = np.load(os.path.join(WEIGHT_PATH, 'XeAe.npy'))
-    actualXeAe = np.load(os.path.join(WEIGHT_PATH, 'XeAe_result.npy'))
-    print np.allclose(expectedXeAe, actualXeAe)
+        save_weights(exc, input_exc)
 
 
 if __name__ == '__main__':
-    # run_simulation()
-    compare_weights()
+    run_simulation()
