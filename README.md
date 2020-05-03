@@ -1,5 +1,6 @@
 ### About
-It is an attempt to reproduce results of the original project. For the original Readme see the original `readme.txt`.
+It is an attempt to reproduce results of the original project. For the original Readme see the original
+`original/readme.txt`.
 
 #### py2brian
 There I started to refactor the existing brian1 version but it is a very time consuming process as the existing code is
