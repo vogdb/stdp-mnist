@@ -16,5 +16,5 @@ Basically we just take an idea and try to build the same in the latest Brian2.
 
 #### Existing rewrites of the original
 - https://github.com/djsaunde/lm-snn
-- https://github.com/zxzhijia/Brian2STDPMNIST
 - https://github.com/whenov/stdp-mnist-brian2
+- https://github.com/bamford/Brian2STDPMNIST
