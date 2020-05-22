@@ -15,6 +15,7 @@ plotting functions.
 Basically we just take an idea and try to build the same in the latest Brian2.
 
 #### Existing rewrites of the original
+- The best one https://github.com/BindsNET/bindsnet/tree/master/examples/mnist
 - https://github.com/djsaunde/lm-snn
 - https://github.com/whenov/stdp-mnist-brian2
 - https://github.com/bamford/Brian2STDPMNIST

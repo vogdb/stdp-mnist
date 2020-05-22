@@ -92,6 +92,13 @@ def run_network(net, test_mode):
             _normalize_weights(net['XeAe'], 78.)
         net.run(single_example_time)
 
+        # TODO for training we need to provide a SpikeMonitor on 'Ae'(exc neurons) that would record all spikes of this
+        # group. After training is finished, we need to count which neurons were most active during which labels. If
+        # during number 6, the most active neurons were 137 and 301 => their activity tells than 6 is being seen.
+        # In test mode we define the seen number whose neurons are mostly active.
+
+        # I'm dropping the current work due to a good implementation of this in https://github.com/BindsNET/bindsnet/tree/master/examples/mnist
+
 
 if __name__ == '__main__':
     test_mode = False
