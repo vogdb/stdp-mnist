@@ -8,9 +8,9 @@ resting_time = 0.15 * b.second
 v_rest_e = -65. * b.mV
 v_rest_i = -60. * b.mV
 v_reset_e = -65. * b.mV
-v_reset_i = -45. * b.mV
+v_reset_i = 'v=-45.*mV'
 # v_thresh_e = -52. * b.mV
-v_thresh_i = -40. * b.mV
+v_thresh_i = 'v>-40.*mV'
 refrac_e = 5. * b.ms
 refrac_i = 2. * b.ms
 
@@ -30,7 +30,7 @@ reset_eqs_e = 'v = v_reset_e; theta += theta_plus_e; timer = 0*ms'
 reset_eqs_e_test = 'v = v_reset_e; timer = 0*ms'
 
 offset = 20.0 * b.mV
-v_thresh_e = '(v>(theta - offset - 52*mV)) * (timer>refrac_e)'
+v_thresh_e = '(v>(theta - offset - 52*mV)) and (timer>refrac_e)'
 neuron_eqs_e_base = '''
         dv/dt = ((v_rest_e - v) + (I_synE+I_synI) / nS) / (100*ms)  : volt
         I_synE = ge * nS *         -v                               : amp
